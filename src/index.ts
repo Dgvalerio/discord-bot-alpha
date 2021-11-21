@@ -1,35 +1,32 @@
-// Require the necessary discord.js classes
-import { Client, Intents } from 'discord.js';
+import { Client, Intents, Interaction } from 'discord.js';
 
-import { token } from '../config.json';
+import { ping, user, server } from './commands';
+import { token } from './configs/config.json';
+import { MountCommand, registerCommands } from './utils';
 
-// Create a new client instance
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+(async () => {
+  const commands: { [key: string]: MountCommand.Model } = {
+    ping,
+    server,
+    user,
+  };
 
-// When the client is ready, run this code (only once)
-client.once('ready', () => {
-  console.log(`Logged in as ${client.user?.tag}!`);
-});
+  await registerCommands(Object.entries(commands).map((value) => value[1]));
 
-client.on('interactionCreate', async (interaction) => {
-  if (!interaction.isCommand()) return;
+  console.log('Iniciando bot...');
 
-  switch (interaction.commandName) {
-    case 'ping':
-      await interaction.reply('Pong!');
-      break;
-    case 'server':
-      await interaction.reply(
-        `Server name: ${interaction.guild?.name}\nTotal members: ${interaction.guild?.memberCount}`
-      );
-      break;
-    case 'user':
-      await interaction.reply(
-        `Your tag: ${interaction.user.tag}\nYour id: ${interaction.user.id}`
-      );
-      break;
-  }
-});
+  const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
-// Login to Discord with your client's token
-client.login(token);
+  client.once('ready', () => {
+    console.log(`Bot ${client.user?.tag} iniciado com sucesso!`);
+    console.log('Esperando por comandos...');
+  });
+
+  client.on('interactionCreate', async (interaction: Interaction) => {
+    if (!interaction.isCommand()) return;
+
+    await commands[interaction.commandName].action(interaction);
+  });
+
+  await client.login(token);
+})();
