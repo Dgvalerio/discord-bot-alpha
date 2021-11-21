@@ -1,7 +1,7 @@
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
 
-import { clientId, guildId, token } from '../configs/config.json';
+import { clientId, guildId, token } from '../../config.json';
 import { MountCommand } from './mountCommand';
 
 export const registerCommands = async (commands: MountCommand.Model[]) => {

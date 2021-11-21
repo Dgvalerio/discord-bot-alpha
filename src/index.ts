@@ -1,7 +1,7 @@
 import { Client, Intents, Interaction } from 'discord.js';
 
+import { token } from '../config.json';
 import { ping, user, server } from './commands';
-import { token } from './configs/config.json';
 import { MountCommand, registerCommands } from './utils';
 
 (async () => {
