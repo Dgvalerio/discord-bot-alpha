@@ -1,7 +1,7 @@
 import { Client, Intents } from 'discord.js';
 
 import { token } from '../config.json';
-import { ping, user, server } from './commands';
+import { ping, user, server, col, res } from './commands';
 import { interactionCreate, ready } from './events';
 import { MountCommand, registerCommands } from './utils';
 
@@ -12,11 +12,20 @@ import { MountCommand, registerCommands } from './utils';
     ping,
     server,
     user,
+    col,
+    res,
   };
 
   await registerCommands(Object.entries(commands).map(([, model]) => model));
 
-  const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+  const client = new Client({
+    intents: [
+      Intents.FLAGS.GUILDS,
+      Intents.FLAGS.GUILD_MESSAGES,
+      Intents.FLAGS.GUILD_MESSAGE_TYPING,
+      Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+    ],
+  });
 
   ready(client);
 
