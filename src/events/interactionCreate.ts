@@ -9,7 +9,5 @@ export const interactionCreate = (
   client.on('interactionCreate', async (interaction: Interaction) => {
     if (!interaction.isCommand()) return;
 
-    console.log(interaction);
-
     await commands[interaction.commandName].action(interaction);
   });
