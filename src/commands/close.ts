@@ -1,3 +1,4 @@
+import { differenceInMinutes } from 'date-fns';
 import {
   CollectorFilter,
   Message,
@@ -43,8 +44,15 @@ export default mountCommand({
       const exampleEmbed = new MessageEmbed()
         .setAuthor(username, url, url)
         .setThumbnail(url)
-        .addField('\u200B', '\u200B', false)
         .setTimestamp();
+
+      const activeTime = differenceInMinutes(
+        new Date(),
+        new Date(response?.success?.start || '')
+      );
+
+      const minutes = activeTime % 60;
+      const hours = (activeTime - minutes) / 60;
 
       if (response.success) {
         interaction.channel?.send({
@@ -52,7 +60,13 @@ export default mountCommand({
             exampleEmbed
               .setTitle('Apontamento finalizado!')
               .setColor('#00c853')
-              .setDescription(item.content),
+              .addField('Mensagem:', item.content)
+              .addField(
+                'Duração:',
+                `${hours} horas e ${minutes} minutos.`,
+                false
+              )
+              .addField('\u200B', '\u200B', false),
           ],
         });
       } else if (response.failure) {
@@ -61,7 +75,8 @@ export default mountCommand({
             exampleEmbed
               .setTitle('Sem apontamentos para finalizar!')
               .setColor('#d50000')
-              .setDescription(response.failure.messages.join('\n')),
+              .setDescription(response.failure.messages.join('\n'))
+              .addField('\u200B', '\u200B', false),
           ],
         });
       }
