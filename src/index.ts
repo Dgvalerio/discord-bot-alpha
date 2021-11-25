@@ -1,7 +1,7 @@
 import { Client, Intents } from 'discord.js';
 
 import { token } from '../config.json';
-import { ping, user, server, col, res } from './commands';
+import { ping, user, server, col, res, start, close } from './commands';
 import { interactionCreate, ready } from './events';
 import { MountCommand, registerCommands } from './utils';
 
@@ -14,6 +14,8 @@ import { MountCommand, registerCommands } from './utils';
     user,
     col,
     res,
+    start,
+    close,
   };
 
   await registerCommands(Object.entries(commands).map(([, model]) => model));

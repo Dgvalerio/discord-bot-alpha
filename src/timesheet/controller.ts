@@ -3,7 +3,7 @@ import axios from 'axios';
 /**
  * @module Timesheet
  * */
-class Timesheet {
+export class Timesheet {
   private axios = axios.create({
     baseURL: 'https://luby-timesheet.azurewebsites.net',
     headers: {
@@ -83,15 +83,3 @@ class Timesheet {
     return response.data;
   }
 }
-
-(async () => {
-  // const sheet = new Timesheet();
-  // const clients = await sheet.listClients();
-  // const projects = await sheet.listProjects();
-  // const categories = await sheet.listCategories();
-  // const projectProgress = await sheet.showProjectProgress();
-  // console.table(clients);
-  // console.table(projects);
-  // console.table(categories);
-  // console.table([projectProgress]);
-})();
