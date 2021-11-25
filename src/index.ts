@@ -1,14 +1,18 @@
 import { Client, Intents } from 'discord.js';
 
 import { token } from '../config.json';
-import { start, close } from './commands';
+import { start, close, today } from './commands';
 import { interactionCreate, ready } from './events';
 import { MountCommand, registerCommands } from './utils';
 
 (async () => {
   console.log('Iniciando bot...');
 
-  const commands: { [key: string]: MountCommand.Model } = { start, close };
+  const commands: { [key: string]: MountCommand.Model } = {
+    start,
+    close,
+    today,
+  };
 
   await registerCommands(Object.entries(commands).map(([, model]) => model));
 

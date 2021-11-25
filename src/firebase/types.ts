@@ -12,13 +12,21 @@ export namespace Util {
 export namespace Appointment {
   export type Model = {
     id: string;
-    message: string;
+    message?: string;
     user: string;
     start: Date;
     close?: Date;
   };
 
-  export type Node = Omit<Model, 'id'>;
+  export type NodeModel = {
+    id: string;
+    message?: string;
+    user: string;
+    start: string;
+    close?: string;
+  };
+
+  export type Node = Omit<NodeModel, 'id'>;
 }
 
 // Use Case Types
@@ -40,6 +48,10 @@ export namespace CloseAppointment {
   export type Response = Util.Response;
 }
 
+export namespace TodayAppointments {
+  export type Response = Appointment.Model[];
+}
+
 // CRUD Types
 export namespace CreateAppointment {
   export type Params = {
@@ -53,7 +65,7 @@ export namespace CreateAppointment {
 export namespace UpdateAppointment {
   export type Params = {
     id: string;
-    attributes: Partial<Appointment.Node>;
+    attributes: Partial<Appointment.Model>;
   };
 
   export type Model = Appointment.Model;

@@ -7,6 +7,7 @@ import {
   CreateAppointment,
   CloseAppointment,
   UpdateAppointment,
+  TodayAppointments,
 } from './types';
 
 /**
@@ -105,6 +106,18 @@ export class FirebaseController {
   }
 
   /**
+   * Method to list today Appointments
+   * @return {Promise<TodayAppointments.Response>}
+   * */
+  public async todayAppointments(): Promise<TodayAppointments.Response> {
+    const response = await this.listAppointments();
+
+    const today = new Date().getDate();
+
+    return response.filter((res) => res.start.getDate() === today);
+  }
+
+  /**
    * Method to create a Appointment
    * @param {CreateAppointment.Params} attributes - attributes of Appointment.
    * @return {Promise<CreateAppointment.Model>}
@@ -126,11 +139,19 @@ export class FirebaseController {
    * @return {Promise<Appointment.Model>}
    * */
   public async showAppointment(id: string): Promise<Appointment.Model> {
-    const { data }: AxiosResponse<Appointment.Node> = await this.axios.get(
+    const {
+      data: { user, start, close, message },
+    }: AxiosResponse<Appointment.Node> = await this.axios.get(
       this.mountRoute(`/${id}`)
     );
 
-    return { id, ...data };
+    return {
+      id,
+      user,
+      start: new Date(start),
+      close: close ? new Date(close) : undefined,
+      message,
+    };
   }
 
   /**
@@ -142,7 +163,15 @@ export class FirebaseController {
       this.mountRoute()
     );
 
-    return FirebaseController.listAdapter(data);
+    return FirebaseController.listAdapter<Appointment.Model>(data).map(
+      ({ id, user, start, close, message }) => ({
+        id,
+        user,
+        start: new Date(start),
+        close: close ? new Date(close) : undefined,
+        message,
+      })
+    );
   }
 
   /**
