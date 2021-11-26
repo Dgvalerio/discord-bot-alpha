@@ -6,7 +6,8 @@
   "author": "dgvalerio <al.davigvalerio@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "tsnd --respawn --transpile-only src/index.ts"
+    "start": "tsnd --respawn --transpile-only src/index.ts",
+    "dev": "tsnd --respawn --transpile-only src/github/index.ts"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.3.1",
